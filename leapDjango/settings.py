@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-hd#gky#(j9t!(c!_#_zoc(^#f#khar^&u8d)!tj-1ha1ki-kqj
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['164.90.247.111', 'localhost']
 
 
 # Application definition
@@ -77,12 +77,12 @@ WSGI_APPLICATION = "leapDjango.wsgi.application"
 ## changed database to postgresql, using command 'python manage.py startapp accounts'
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": 'postgres',
-        'USER': 'postgres',
-        'PASSWORD': 'fengshuhang2017',
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": 'leap',
+        'USER': 'leap',
+        'PASSWORD': 'fengshuhang',
         'HOST' : 'localhost',
-        'PORT' : '5433' ,
+        'PORT' : '' ,
     }
 }
 
@@ -127,3 +127,6 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+import os
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
