@@ -12,7 +12,7 @@
 <h3>Existing users:</h3>
 <ul>
   {% for user in users %}
-    <li>{{ user.username }}</li>
+    <li>{{ user.email }}</li>
   {% empty %}
     <li>No users yet.</li>
   {% endfor %}
