@@ -47,21 +47,23 @@ logging.basicConfig(format=fmt, level=lvl)
 
 
 def home_view(request):
-    user = request.user
-    logging.debug(user)
-    context = {}
-    if str(user) is not '':
+    if request.user.is_authenticated:
+        user = request.user
+        context = {}
         if request.method == 'POST':
-            form = CustomUserForm(request.POST, instance=user)
+            form = CustomUserForm(request.POST, request.FILES, instance=user)
             if form.is_valid():
                 form.save()
                 messages.success(request, 'Your profile has been updated.')
+        elif request.GET.get('cancel'):
+            form = CustomUserForm(instance=user)
         else:
             form = CustomUserForm(instance=user)
 
         context = {'form': form}
         return render(request, 'home.html', context)
-    return render(request, 'home.html', context)
+    else:
+        return render(request, 'home.html')
 
 
 def facebook_callback(request):

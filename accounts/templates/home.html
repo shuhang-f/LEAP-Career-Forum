@@ -2,14 +2,15 @@
 
 {% block content %}
   {% if user.is_authenticated %}
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
       {% csrf_token %}
       {{ form.as_p }}
       <button type="submit">Save changes</button>
+      <a href="{% url 'accounts:home' %}?cancel=1">Cancel</a>
     </form>
   {% else %}
     <p>Please select an option:</p>
-    <!-- <button onclick="window.location.href='/login'">Login</button>
-    <button onclick="window.location.href='/signup'">Signup</button> -->
+    <a href="{% url 'accounts:login' %}">Login</a>
+    <a href="{% url 'accounts:signup' %}">Signup</a>
   {% endif %}
 {% endblock %}

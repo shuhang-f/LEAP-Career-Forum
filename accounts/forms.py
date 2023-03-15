@@ -5,19 +5,21 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm, Authenti
 
 from .models import CustomUser
 
+from django.forms import ClearableFileInput
+
 
 class CustomUserCreationForm(UserCreationForm):
 
     class Meta:
         model = CustomUser
-        fields = ("email",)
+        fields = ("id",)
 
 
 class CustomUserChangeForm(UserChangeForm):
 
     class Meta:
         model = CustomUser
-        fields = ("email",)
+        fields = ("id",)
 
 
 
@@ -34,16 +36,27 @@ from django.contrib.auth.forms import UserChangeForm
 from .models import CustomUser
 
 ROLE_CHOICES = (
+    #(vale in database, display)
     ('student', 'Student'),
-    ('professor', 'Professor'),
+    ('profession', 'Professional'),
 )
 
 class CustomUserForm(UserChangeForm):
+    username = forms.CharField(max_length=255)
     first_name = forms.CharField(max_length=255)
     last_name = forms.CharField(max_length=255)
     email = forms.EmailField()
     role = forms.ChoiceField(choices=ROLE_CHOICES)
+    file_upload = forms.FileField(required=False, widget=ClearableFileInput(attrs={'multiple': True}))
 
     class Meta(UserChangeForm.Meta):
         model = CustomUser
-        fields = ('first_name', 'last_name', 'email', 'role')
+        fields = ('username', 'first_name', 'last_name', 'email', 'role', 'file_upload')
+
+
+    def __init__(self, *args, **kwargs):
+        super(CustomUserForm, self).__init__(*args, **kwargs)
+        instance = getattr(self, 'instance', None)
+        if instance and instance.pk:
+            self.fields['file_upload'].widget = ClearableFileInput(attrs={'multiple': True})
+            self.fields['file_upload'].initial = instance.file_upload

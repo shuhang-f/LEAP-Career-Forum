@@ -6,16 +6,25 @@ from django import forms
 from .managers import CustomUserManager
 
 ROLE_CHOICES = (
+    #(vale in database, display)
     ('student', 'Student'),
     ('profession', 'Professional'),
 )
 
+
+def user_directory_path(instance, filename):
+    # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
+    return 'user_{0}/{1}'.format(instance.pk, filename)
+
+
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_("email address"), unique=True)
+    username = models.CharField(max_length=255)
     created_at = models.DateTimeField(default=timezone.now)
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
-    role = forms.ChoiceField(choices=ROLE_CHOICES)
+    role = models.CharField(max_length=255, choices=ROLE_CHOICES)
+    file_upload = models.FileField(upload_to= user_directory_path, blank=True, null=True)
 
 
 
@@ -34,5 +43,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     objects = CustomUserManager()
 
-    def __str__(self):
-        return self.email
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
