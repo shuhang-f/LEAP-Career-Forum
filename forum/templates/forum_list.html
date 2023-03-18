@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Discussions</h1>
+  
+  <h2>Create a new discussion</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Submit</button>
+  </form>
+
+  <h2>Existing discussions</h2>
+  <ul>
+    {% for discussion in discussions %}
+      <li>
+        <h3>{{ discussion.title }}</h3>
+        <p>{{ discussion.content }}</p>
+        <p>By: {{ discussion.author.username }}</p>
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>{{ discussion.title }}</h1>
+    <p>{{ discussion.content }}</p>
+    <h2>Comments</h2>
+    <ul>
+        {% for comment in comments %}
+            <li>
+                <strong>{{ comment.user.username }}</strong>: {{ comment.content }}
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

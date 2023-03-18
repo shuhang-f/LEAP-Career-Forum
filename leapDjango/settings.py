@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "accounts",
+    "forum",
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -55,14 +56,18 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     'social_django.middleware.SocialAuthExceptionMiddleware',
+    # for message
+    'django.contrib.messages.middleware.MessageMiddleware',
 ]
 
 ROOT_URLCONF = "leapDjango.urls"
 
+import os
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        #i used shared base templates here, so the dirs would always go to the shared 
+        'DIRS': [(os.path.join(BASE_DIR, 'sharedTemplates')),],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -151,8 +156,11 @@ ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 SOCIALACCOUNT_QUERY_EMAIL = True
-SOCIAL_AUTH_FACEBOOK_KEY = '3535732453362259'  # App ID
-SOCIAL_AUTH_FACEBOOK_SECRET = 'e0d6b49bc8952517a293431416305934'  # App Secret
+
+from decouple import config
+
+SOCIAL_AUTH_FACEBOOK_KEY = config('SOCIAL_AUTH_FACEBOOK_KEY') # App ID
+SOCIAL_AUTH_FACEBOOK_SECRET =config('SOCIAL_AUTH_FACEBOOK_SECRET')  # App Secret
 SOCIALACCOUNT_PROVIDERS = {
     'facebook': {
         'METHOD': 'oauth2',
@@ -185,9 +193,14 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 
 
-LOGIN_REDIRECT_URL = 'home'
+# what does this do?
+# LOGIN_REDIRECT_URL = 'home'
+
 SOCIALACCOUNT_QUERY_EMAIL = True
 
+
+#if user is not login, redirect to login
+LOGIN_URL = '/login/'
 
 LOGIN_REDIRECT_URL = '/landing/'
 
